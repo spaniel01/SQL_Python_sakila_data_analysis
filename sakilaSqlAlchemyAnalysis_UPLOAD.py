@@ -49,7 +49,7 @@ stat = db.select(category.c.name,
                         order_by(db.desc("N_rented"))
 
 # 5. Actor popularity (no ranking)
-#Part 1
+# Part 1
 roles_tab_temp = db.select(
     db.func.concat(actor.c.last_name, " ", actor.c.first_name).label("full_name"),
     db.func.count().label("roles")).\
@@ -58,7 +58,7 @@ roles_tab_temp = db.select(
             group_by("full_name").\
                 order_by(db.desc("roles")).\
                     cte("roles_tab_temp")
-#Part 2
+# Part 2
 appearances_tab_temp = db.select(
     db.func.concat(actor.c.last_name, " ", actor.c.first_name).label("full_name"),
     db.func.count().label("N_appearances_rented_movs")).\
@@ -67,7 +67,7 @@ appearances_tab_temp = db.select(
             join(rental).group_by("full_name").\
                 order_by(db.desc("N_appearances_rented_movs")).\
                     cte("appearances_tab_temp")
-#Final query
+# Final query
 stat = db.select(
     roles_tab_temp.c.full_name, 
     roles_tab_temp.c.roles, 
@@ -103,7 +103,7 @@ stat = db.select(
                                          cumSumEarningByMonth, movie_by_month_temp.c.distinct_dates == cumSumEarningByMonth.c.distinct_dates))
 
 # 7. Customers, new and spending
-#Part 1
+# Part 1
 customer_join_date = db.select(
     store.c.store_id, customer.c.customer_id, 
     db.func.min(payment.c.payment_date).label("date_joined_approx"),
@@ -111,14 +111,14 @@ customer_join_date = db.select(
     select_from(store.join(customer))\
         .join(payment).\
             group_by(customer.c.customer_id)
-#Part 2
+# Part 2
 customers_cum_monthly = db.select(
     customer_join_date.c.store_id, db.func.count().label("new_cust_monthly"),
     customer_join_date.c.date_year_month).\
     group_by(customer_join_date.c.store_id,
              customer_join_date.c.date_year_month).\
         cte("customers_cum_monthly")
-#Query
+# Final query
 stat = db.select(
     customers_cum_monthly.c.store_id, 
     customers_cum_monthly.c.date_year_month, 
@@ -138,7 +138,7 @@ stat = db.select(
                 order_by(db.desc("total_spent"))
 
 # 9. Best customers, total and member since...
-#Part 1
+# Part 1
 customerTotalSpend = db.select(
     customer.c.customer_id, 
     customer.c.last_name,
@@ -147,20 +147,20 @@ customerTotalSpend = db.select(
         group_by(customer.c.customer_id).\
             order_by(db.desc("total_spent")).\
                 cte("customerTotalSpend")
-#Part 2
+# Part 2
 customerFirstTakeOut = db.select(
     customer.c.customer_id,
     db.func.min(payment.c.payment_date).label("first_takeout")).\
     group_by(customer.c.customer_id).\
         cte("customerFirstTakeOut")
-#Final query
+# Final query
 stat = db.select(
     customerTotalSpend.\
         join(customerFirstTakeOut, 
              customerTotalSpend.c.customer_id == customerFirstTakeOut.c.customer_id))
 
 # 10. Overview, store and customer addresses
-#part1
+# Part 1
 storeLocation = db.select(
     store.c.store_id, 
     city.c.city, 
@@ -169,7 +169,7 @@ storeLocation = db.select(
     select_from(store.join(address)).\
         join(city).\
             cte("storeLocation")
-#part2
+# Part 2
 customerLocation =db.select(
     customer.c.customer_id, 
     customer.c.store_id, 
@@ -186,7 +186,7 @@ stat = db.select(
              storeLocation.c.store_id == customerLocation.c.store_id))
 
 # 11. Agg of customers by store and city district
-#part1
+# Part 1
 customers_by_district = db.select(
     store.c.store_id, db.func.count().label("customer_district_size"),
     address.c.district).\
@@ -196,7 +196,7 @@ customers_by_district = db.select(
                 order_by(store.c.store_id, 
                          db.desc("customer_district_size")).\
                     cte("customers_by_district")
-#Final Query
+# Final Query
 stat = db.select(
     customers_by_district.c.store_id, 
     customers_by_district.c.customer_district_size, 
