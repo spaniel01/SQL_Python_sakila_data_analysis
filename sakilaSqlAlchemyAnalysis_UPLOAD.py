@@ -3,9 +3,10 @@ import sqlalchemy as db
 import pandas as pd
 
 # Comment: As an excercise, this file contains the translation of the most relevant MySQL queries found in the same repository into SQLAlchemy core queries. To reduce clutter, the code to execute each statement was removed:
-#connection.execute(stat).fetchall()
+# connection.execute(stat).fetchall()
 # Also, data was not yet transformed to pd.DataFrame() objects. This will be done directly in the Jupyter Notebook report, where these queries will be used to obtain DB data. This data will then be further analyzed and discussed. 
-# NOTE: Sensitive data was removed from connection string!
+# NOTE 1: Sensitive data was removed from connection string! 
+# NOTE 2: To be able to execute code within the Spyder (!) while providing for greater readability, "\" type line breaks were added .
 
 # Create engine, load metadata, establish connection
 engine = db.create_engine('mysql+mysqlconnector://***') 
