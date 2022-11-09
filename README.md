@@ -6,4 +6,4 @@ The project consists of the following steps, separated only for demonstration pu
 
 1. Analysis of database (DB) with SQL. The aim is only to show querying abilities. (DONE!)
 2. Analysis of DB directly with Python's SQLAlchemy core. (DONE!)
-3. Generate report in Jupyter Notebook. (UP NEXT!)
+3. Generate report in Jupyter Notebook. (4/5 DONE!)
